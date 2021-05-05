@@ -1,0 +1,89 @@
+\documentclass[12pt]{report}
+
+\usepackage{csquotes}
+\usepackage[ngerman]{babel}
+
+\usepackage[utf8]{inputenc}
+\usepackage{glossaries}
+\usepackage{tabto}
+\usepackage{verbatimbox}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage{lscape}
+\usepackage{adjustbox}
+\usepackage{lipsum}
+\usepackage[toc,page]{appendix}
+\usepackage{enumitem}
+\usepackage{biblatex}
+
+\addbibresource{sample.bib}
+\makeglossaries
+
+%\include{chapters/glossary}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,      
+    urlcolor=black,
+}
+
+
+\graphicspath{ {images/} }
+
+\usepackage[pagestyles]{titlesec}
+\titleformat{\chapter}[hang]{\normalfont\huge\bfseries}{\thechapter}{1em}{\Huge}
+\titlespacing*{\chapter}{0pt}{0pt}{1em}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titlespacing*{\section}{0em}{1em}{0em}
+\titlespacing*{\chapter}{0pt}{-2\baselineskip}{1em}
+
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titleformat{\subparagraph}[runin]{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{}
+\title{
+    %\includegraphics[scale=0.8]{content/pictures/BaseLogo.png}\\
+    \hfill \break
+    {Projektarbeit Artificial Intelligence}\\
+    {\large Berner Fachhochschule Departement Technik und Informatik}\\
+    {\large Frühlingssemester 2021}\\
+    {\large Dozenten: Jürgen Eckerle}\\
+}
+
+\author{Manuel Gasser und Julian Haldimann}
+\date{\today}
+
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
+
+\begin{document}
+    \maketitle
+
+    \chapter{Abstract}
+    \input{content/chapters/0_Abstract.tex}
+
+    \tableofcontents
+    
+    \pagenumbering{arabic}
+	\include{content/chapters/1_Introduction.tex}
+	\include{content/chapters/7_Conclusion.tex}
+
+    \printglossaries
+
+    \listoftables
+
+    \listoffigures
+\end{document}
