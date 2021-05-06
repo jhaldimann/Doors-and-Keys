@@ -1,0 +1,33 @@
+\chapter{Vorgehen}
+In diesem Kapitel wollen wir Schritt für Schritt
+angeben wie wir beim Lösen der einzelnene
+Aufgaben vorgegenagen sind.
+
+\section{Modelieren der Ausgangslage}
+Bei der Modelierung der Ausgangslage, haben wir genau
+die Situation, wie sie auf dem Aufgabenblatt steht,
+in Prolog umgesetzt. Dabei haben wir für die 
+Schlüssel und Tür Beziehung das Keyword
+\textbf{doorkey()} verwendet. Dabei wird in der 
+ersten Position in der Klammer der Raum und an der
+zweiten Position der Schlüssel eingesetzt. So kann überprüft 
+werden, ob eine Raum einen Schlüssel enthält.\\
+\\
+
+\noindent
+Eine weitere wichtige Modelierung, welche zwingend notwendig
+war, ist die Verschachtelung der Räume. Wir müssen wissen,
+in welchem Raum sich welcher Unterraum befindet, damit wir an 
+weitere Schlüssel kommen können. Deswegen haben wir die 
+Funktion \textbf{roomcontainsroom} erstehlt, welche als erstes
+Argument den übergeordneten Raum nimmt und an der zweiten Stelle
+den Unterraum. Somit kann geprüft werden, ob ein Raum in einem 
+anderen Raum vorhanden ist. Dies ist vorallem dann wichtig, wenn
+wir wissen wollen wo sich ein bestimmter Raum befindet.\\
+\\
+
+\noindent
+Zu guter Letzt haben wir noch den Raum festgelegt, in welchem sich 
+der Schatz befindet, welchen man schlussendlich finden muss. Diese
+Funktion wird auch nur verwendet um zu vergleichen, ob das Ziel 
+erreicht wurde.
