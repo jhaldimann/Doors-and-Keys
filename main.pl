@@ -12,8 +12,10 @@ roomkey(12,13).
 roomkey(17,20).
 roomkey(3,10).
 roomkey(3,15).
-% roomkey(4,6).
-% roomkey(5,6).
+roomkey(4,6).
+roomkey(5,6).
+roomkey(6,8).
+roomkey(6,9).
 roomkey(2,4).
 roomkey(8,11).
 roomkey(10,12).
@@ -40,35 +42,17 @@ roomcontainsroom(9,10).
 roomcontainsroom(16,19).
 roomcontainsroom(14,15).
 roomcontainsroom(19,13).
+roomcontainsroom(21,17).
 
 roomcontainschest(13).
 
-list_member(X,[X|_]).
-list_append(A,T,T) :- list_member(A,T).
-list_delete(X,[X|L1], L1).
+member(X,[X|_]).
+member(X,[_|TAIL]) :- member(X,TAIL).
+append(A,T,T) :- member(A,T),!.
+append(A,T,[A|T]).
 
+cangetkeyfrom(K,F):- roomkey(F,K) ; (K > 0, roomkey(X,K), cangetkeyfrom(X,F), (roomcontainsroom(F,X) ; (roomcontainsroom(Y,X), cangetkeyfrom(Y,F)))).
 
-% Recursive roomcontainsroom
-% X -> outer room
-% Y -> inner room
-rrcr(X,Y):- roomcontainsroom(X,Y) ; (roomcontainsroom(X,Z) , rrcr(Z,Y)).
+canreachroomfrom(R,F):- cangetkeyfrom(R,F), (roomcontainsroom(F,R) ; (roomcontainsroom(Y,R), cangetkeyfrom(Y,F))).
 
-% Recursive can get key from
-% X -> key
-% Y -> current room
-rcgkf(X,Y):- roomkey(Y,X) ; (roomkey(Y,K) , forall(member(M,roomcontainsroom(Y,K)),rcgkf(X,M))).
-
-c(X,Y):- rrcr(Y,X).
-
-cer(X,Y):-  TBE = [], 
-            roomcontainsroom(X, Rooms),
-            write(Rooms).
-            % append(Rooms, TBE, TBE).
-
-% cangetkeyfrom(R,F):- getkey(R, F) ; (getkey(X, F), roomcontainsroom(F, X), getkey(Y, X), roomcontainsroom(F, Y), cangetkeyfrom(R, Y)).
-
-% getkey(K,F):- roomkey(F, K) ; (roomkey(F, X), roomcontainsroom(F, X), getkey(K, X)).
-
-enterroomfrom(R,F):- cangetkeyfrom(R,F), (roomcontainsroom(F,R) ; roomcontainsroom(X,R), enterroomfrom(X,F)).
-
-cangetkeyfrom(K,F):- roomkey(F, K) ; (roomkey(X, K), cangetkeyfrom(X, F), roomcontainsroom(F, X) ; (roomcontainsroom(Y, X), cangetkeyfrom(Y, F))).
+cangetchestfrom(F):- roomcontainschest(X), cangetkeyfrom(X,F), canreachroomfrom(X,F).
