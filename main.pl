@@ -36,6 +36,7 @@ roomcontainsroom(0,21).
 roomcontainsroom(1,6).
 roomcontainsroom(3,2).
 roomcontainsroom(3,4).
+roomcontainsroom(3,5).
 roomcontainsroom(3,8).
 roomcontainsroom(3,9).
 roomcontainsroom(9,10).
@@ -46,13 +47,16 @@ roomcontainsroom(21,17).
 
 roomcontainschest(13).
 
+union([X|Y],Z,W) :- member(X,Z),  union(Y,Z,W).
+union([X|Y],Z,[X|W]) :- \+ member(X,Z), union(Y,Z,W).
+union([],Z,Z).
 member(X,[X|_]).
 member(X,[_|TAIL]) :- member(X,TAIL).
-append(A,T,T) :- member(A,T),!.
-append(A,T,[A|T]).
+list_append(A,T,T) :- member(A,T),!.
+list_append(A,T,X) :- append([A],T,X).
 
-cangetkeyfrom(K,F):- roomkey(F,K) ; (K > 0, roomkey(X,K), cangetkeyfrom(X,F), (roomcontainsroom(F,X) ; (roomcontainsroom(Y,X), cangetkeyfrom(Y,F)))).
+cangetkeyfrom(K,F,L,B):- (roomkey(F, K), list_append(K, L, B) ; (K > 0, list_append(K, L, A), roomkey(X, K), cangetkeyfrom(X,F,A,C), (roomcontainsroom(F,X), append([],C,B) ; (roomcontainsroom(Y,X), cangetkeyfrom(Y,F,C,B))))).
 
-canreachroomfrom(R,F):- cangetkeyfrom(R,F), (roomcontainsroom(F,R) ; (roomcontainsroom(Y,R), cangetkeyfrom(Y,F))).
+canreachroomfrom(R,F,L):- cangetkeyfrom(R,F,[],A), (roomcontainsroom(F,R), append([],A,L) ; (roomcontainsroom(Y,R), cangetkeyfrom(Y,F,[],L))).
 
-cangetchestfrom(F):- roomcontainschest(X), cangetkeyfrom(X,F), canreachroomfrom(X,F).
+cangetchestfrom(F,L):- roomcontainschest(X), cangetkeyfrom(X,F,[],A), canreachroomfrom(X,F,B), union(A,B,L).
