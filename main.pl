@@ -55,8 +55,28 @@ member(X,[_|TAIL]) :- member(X,TAIL).
 list_append(A,T,T) :- member(A,T),!.
 list_append(A,T,X) :- append([A],T,X).
 
+bubble_sort(List,Sorted):-b_sort(List,[],Sorted).
+b_sort([],Acc,Acc).
+b_sort([H|T],Acc,Sorted):-bubble(H,T,NT,Max),b_sort(NT,[Max|Acc],Sorted).
+   
+bubble(X,[],[],X).
+bubble(X,[Y|T],[Y|NT],Max):-nth0(0,X,A), nth0(0,Y,B), A>B,bubble(X,T,NT,Max).
+bubble(X,[Y|T],[X|NT],Max):-nth0(0,X,A), nth0(0,Y,B), A=<B,bubble(Y,T,NT,Max).
+
+% Can key K be reached from room F and if yes get list of keys necessary B
 cangetkeyfrom(K,F,L,B):- (roomkey(F, K), list_append(K, L, B) ; (K > 0, list_append(K, L, A), roomkey(X, K), cangetkeyfrom(X,F,A,C), (roomcontainsroom(F,X), append([],C,B) ; (roomcontainsroom(Y,X), cangetkeyfrom(Y,F,C,B))))).
 
+% Can reach room R from room F and if yes get list of keys necessary L
 canreachroomfrom(R,F,L):- cangetkeyfrom(R,F,[],A), (roomcontainsroom(F,R), append([],A,L) ; (roomcontainsroom(Y,R), cangetkeyfrom(Y,F,[],L))).
 
-cangetchestfrom(F,L):- roomcontainschest(X), cangetkeyfrom(X,F,[],A), canreachroomfrom(X,F,B), union(A,B,L).
+% Can get chest from room F and if yes get list of keys necessary L
+cangetchestfrom(F,L):- roomcontainschest(X), cangetkeyfrom(X,F,[],A), canreachroomfrom(X,F,B), union(A,B,C), sortbykey(F,C,D), append(D,["S"],L).
+
+% Get tuple from key K and number keys necessary to reach N it as O=[N,K]
+lengthkey(K,O):- cangetkeyfrom(K,0,[],B), length(B,N), O=[N,K]. 
+
+% Get only key K from tuple of key and number of keys necessary to reach it 
+getkeyonly(LK,K):- nth0(1,LK,K).
+
+% Sort tuple list L of keys K and keys necessary to reach it N by N
+sortbykey(F,L,O):- maplist(lengthkey, L, A), bubble_sort(A,S), maplist(getkeyonly, S, O).
