@@ -50,8 +50,10 @@ roomcontainschest(13).
 union([X|Y],Z,W) :- member(X,Z),  union(Y,Z,W).
 union([X|Y],Z,[X|W]) :- \+ member(X,Z), union(Y,Z,W).
 union([],Z,Z).
+
 member(X,[X|_]).
 member(X,[_|TAIL]) :- member(X,TAIL).
+
 list_append(A,T,T) :- member(A,T),!.
 list_append(A,T,X) :- append([A],T,X).
 

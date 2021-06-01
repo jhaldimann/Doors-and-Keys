@@ -8,7 +8,7 @@ Bei der Modelierung der Ausgangslage, haben wir genau
 die Situation, wie sie auf dem Aufgabenblatt steht,
 in Prolog umgesetzt. Dabei haben wir für die 
 Schlüssel und Tür Beziehung das Keyword
-\textbf{doorkey()} verwendet. Dabei wird in der 
+\textbf{roomkey()} verwendet. Dabei wird in der 
 ersten Position in der Klammer der Raum und an der
 zweiten Position der Schlüssel eingesetzt. So kann überprüft 
 werden, ob eine Raum einen Schlüssel enthält.\\
@@ -19,7 +19,7 @@ Eine weitere wichtige Modelierung, welche zwingend notwendig
 war, ist die Verschachtelung der Räume. Wir müssen wissen,
 in welchem Raum sich welcher Unterraum befindet, damit wir an 
 weitere Schlüssel kommen können. Deswegen haben wir die 
-Funktion \textbf{roomcontainsroom} erstehlt, welche als erstes
+Funktion \textbf{roomcontainsroom} erstellt, welche als erstes
 Argument den übergeordneten Raum nimmt und an der zweiten Stelle
 den Unterraum. Somit kann geprüft werden, ob ein Raum in einem 
 anderen Raum vorhanden ist. Dies ist vorallem dann wichtig, wenn
@@ -31,3 +31,122 @@ Zu guter Letzt haben wir noch den Raum festgelegt, in welchem sich
 der Schatz befindet, welchen man schlussendlich finden muss. Diese
 Funktion wird auch nur verwendet um zu vergleichen, ob das Ziel 
 erreicht wurde.
+
+\section{Verwendetet Funktionen}
+In diesem Kapitel beschreiben wir alle von uns verwendeten Funktionen.
+Dazu wird auch immer eine kleiner Codeausschnitt zu sehen sein.
+
+\subsection{Union}
+Bei der Union-Funktion wird wie der Name schon sagt eine Vereinigung
+aus zwei Listen gemacht. Diese verwenden wir anschliessend in der 
+\textbf{cangetchestfrom} Methode.
+
+\begin{verbatim}
+    union([X|Y],Z,W) :- member(X,Z),  union(Y,Z,W).
+    union([X|Y],Z,[X|W]) :- \+ member(X,Z), union(Y,Z,W).
+    union([],Z,Z).
+\end{verbatim}
+
+\subsection{Member}
+Mit dieser Funktion überprüfen wir ob ein Element bereits in 
+unsere Liste vorhanden ist. Wenn es vorhanden ist, wird \textbf{True}
+zurück gegeben.
+
+\begin{verbatim}
+    member(X,[X|_]).
+    member(X,[_|TAIL]) :- member(X,TAIL).
+\end{verbatim}
+
+\newpage
+
+\subsection{ListAppend}
+Um unsere Resultate zu speichern, haben wir uns eine Funktion
+zusammengebaut, welche Elemente einer Liste hinzufügt.
+
+\begin{verbatim}
+    list_append(A,T,T) :- member(A,T),!.
+    list_append(A,T,X) :- append([A],T,X).
+\end{verbatim}
+
+\subsection{BubbleSort}
+Da wir unsere Liste noch nach Anzahl benötigter Schlüsser sortieren
+müssen, haben wir uns für den einfachsten Sortieralgorithmus 
+entschieden. Den Bubblesort haben wie folgt umgesetzt:
+
+\begin{verbatim}
+    bubble_sort(List,Sorted):-b_sort(List,[],Sorted).
+    b_sort([],Acc,Acc).
+    b_sort([H|T],Acc,Sorted):-bubble(H,T,NT,Max),b_sort(NT,[Max|Acc],Sorted).
+    
+    bubble(X,[],[],X).
+    bubble(X,[Y|T],[Y|NT],Max):-nth0(0,X,A), nth0(0,Y,B), A>B,bubble(X,T,NT,Max).
+    bubble(X,[Y|T],[X|NT],Max):-nth0(0,X,A), nth0(0,Y,B), A=<B,bubble(Y,T,NT,Max).
+\end{verbatim}
+
+\noindent
+Bei unsere Lösung haben wir eine Liste verwendet, welche bei 0 und nicht bei 1
+startet. Deswegen verwenden wir \textbf{nth0}.
+
+\subsection{cangetkeyfrom}
+Mit dieser Funktion wollen wir herausfinden ob eine Schlüssel K von einem 
+Raum F erreichbar ist. Wenn der Schlüssel erreicht werden kann, wird eine Liste B
+mit allen notwendigen Schlüsseln zurückgegeben.
+
+\begin{verbatim}
+    cangetkeyfrom(K,F,L,B):- (roomkey(F, K), list_append(K, L, B) ; 
+        (K > 0, list_append(K, L, A), roomkey(X, K), cangetkeyfrom(X,F,A,C), 
+        (roomcontainsroom(F,X), append([],C,B) ; 
+        (roomcontainsroom(Y,X), cangetkeyfrom(Y,F,C,B))))).
+\end{verbatim}
+
+\subsection{canreachroomfrom}
+Wie der Name bereits sagt, wollen wir herausfinden ob ein Raum \textbf{R} von einem
+anderen Raum \textbf{F} aus erreicht werden kann. Wenn dies möglich ist, wird die Funktionen
+eine Liste L mit Schlüsseln zurückgeben. Ansonsten wird False als Resultat returniert.
+
+\begin{verbatim}
+    canreachroomfrom(R,F,L):- cangetkeyfrom(R,F,[],A), 
+        (roomcontainsroom(F,R), append([],A,L) ; 
+        (roomcontainsroom(Y,R), cangetkeyfrom(Y,F,[],L))).
+\end{verbatim}
+
+\subsection{cangetchestfrom}
+Diese Funktion ist zuständig herauszufinden, ob wir den Schatz von einem bestimmten
+Raum \textbf{F} aus bekommen können. Wenn Prolog eine Lösung gefunden hat, wird eine
+Liste \textbf{L} mit benötigten Schlüsseln zurückgegeben. Diese Liste ist im Endeffekt
+nichts anderes als eine Schritt für Schritt Anleitung, wie der Schatz erreicht werden 
+kann. Am Ende der Liste wird zusätzlich noch eine \textbf{S} angefügt. Dies symbolisiert 
+den zu findenden Schatz.
+
+\begin{verbatim}
+    cangetchestfrom(F,L):- roomcontainschest(X), cangetkeyfrom(X,F,[],A),
+        canreachroomfrom(X,F,B), union(A,B,C), sortbykey(F,C,D), append(D,["S"],L).
+\end{verbatim}
+
+\newpage
+
+\subsection{lengthkey}
+Um unsere Reihenfolge der Schritte richtig zu bestimmen, haben wir eine Funktion geschrieben,
+welche ein Tupel aus dem Schlüssel \textbf{K} und der Anzahl Schlüssel um den Raum \textbf{N}
+zu erreichen erstellt. So wissen wir genau wo in unserer Liste der entsprechende Schlüssel
+abgelegt werden muss.
+
+\begin{verbatim}
+    lengthkey(K,O):- cangetkeyfrom(K,0,[],B), length(B,N), O=[N,K].
+\end{verbatim}
+
+\subsection{getkeyonly}
+Diese Funktion wird verwendet um den Schlüssel aus dem vorher erstellten Tupel herauszuholen.
+
+\begin{verbatim}
+    getkeyonly(LK,K):- nth0(1,LK,K).
+\end{verbatim}
+
+\subsection{sortbykey}
+Zu guter Letzt wollen wir noch die Liste der Tupels sortieren, welche in den vorherigen Funktionen
+erstellt wurden. Dazu verwenden wir maplist und unseren Bubblesort Algorithmus.
+
+\begin{verbatim}
+    sortbykey(F,L,O):- maplist(lengthkey, L, A), 
+        bubble_sort(A,S), maplist(getkeyonly, S, O).
+\end{verbatim}
