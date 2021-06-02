@@ -1,0 +1,19 @@
+Die Aufgabe war eine mögliche Route zu finden, um als Agent eine 
+Schatz zu finden. Der Schatz ist in einem verschlossenen Raum versteckt.
+Am Ende sollte eine mögliche Route zum Schatz in einer Liste abgebildet
+werden. Die Route beinhaltet verschiedene Schlüssel, welche genau in dieser
+Reihenfolge augelesen werden müssen um ans Ziel zu kommen. Falls keine Route 
+vorhanden ist, wird einfach false zurückgegeben.\\
+\\
+Damit wir überhaupt mit Prolog unser Projekt umsetzen konnten, mussten wir die 
+Modellierung der Räume und der Schlüssel vornehmen. Ohne diese Definition können 
+keine Abfragen gemacht werden. Bei der Thematik mit dem Raum und dessen Inhalt,
+haben wir uns überlegt für jede Kombination einen separaten Eintrag zu machen. \\
+\\
+Dasselbe haben wir für verschachelte Räume gemacht. Jeder Raum der einen oder mehrere
+Räume enthält hat mindestens eine Definition erhalten. Damit wir von einem Startraum
+ausgehen konnten, haben wir einen solchen definiert. Dieser hat in unserem Fall 
+die Raumnummer 0.\\
+\\
+Am Ende der Modellierung haben wir noch definiert, dass sich die Schatzkiste im 
+Raum 13 befindet. 
