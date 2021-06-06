@@ -1,5 +1,6 @@
-Die Aufgabe war eine mögliche Route zu finden, um als Agent eine 
-Schatz zu finden. Der Schatz ist in einem verschlossenen Raum versteckt.
+Die Aufgabe war es dem Agenten einen möglichen Weg zum Schatz zu zeigen. 
+Der Schatz ist in einem der verschlossenen Räume versteckt. Der Ort des
+Schatzes ist jedoch bekannt. Lediglich der Weg zum Ziel ist ein Rätsel.
 Am Ende sollte eine mögliche Route zum Schatz in einer Liste abgebildet
 werden. Die Route beinhaltet verschiedene Schlüssel, welche genau in dieser
 Reihenfolge augelesen werden müssen um ans Ziel zu kommen. Falls keine Route 
@@ -13,7 +14,10 @@ haben wir uns überlegt für jede Kombination einen separaten Eintrag zu machen.
 Dasselbe haben wir für verschachelte Räume gemacht. Jeder Raum der einen oder mehrere
 Räume enthält hat mindestens eine Definition erhalten. Damit wir von einem Startraum
 ausgehen konnten, haben wir einen solchen definiert. Dieser hat in unserem Fall 
-die Raumnummer 0.\\
+die Raumnummer 0. Am Ende der Modellierung haben wir noch definiert, dass sich die 
+Schatzkiste im Raum 13 befindet. \\
 \\
-Am Ende der Modellierung haben wir noch definiert, dass sich die Schatzkiste im 
-Raum 13 befindet. 
+Am Ende der Arbeit konnten wir eine Weg zum Schatz finden. Der kalkulierte Weg wurde
+jedoch noch in einer falschen Reihenfolge ausgegeben und musste noch richtig sortiert
+werden. Dazu haben wir einen einfachen Bubblesort verwendet. Sortiert wurde nach Anzahl Schritten,
+welche man braucht um an einen Schlüssel zu kommen.

@@ -1,27 +1,27 @@
 \chapter{Vorgehen}
 In diesem Kapitel wollen wir Schritt für Schritt
-angeben wie wir beim Lösen der einzelnene
+aufzeigen, wie wir beim Lösen der einzelnene
 Aufgaben vorgegenagen sind.
 
-\section{Modelieren der Ausgangslage}
-Bei der Modelierung der Ausgangslage, haben wir genau
+\section{Modellieren der Ausgangslage}
+Bei der Modellierung der Ausgangslage, haben wir genau
 die Situation, wie sie auf dem Aufgabenblatt steht,
 in Prolog umgesetzt. Dabei haben wir für die 
 Schlüssel und Tür Beziehung das Keyword
-\textbf{roomkey()} verwendet. Dabei wird in der 
-ersten Position in der Klammer der Raum und an der
+\textbf{roomkey()} verwendet. In der 
+ersten Position in der Klammer wird der Raum und an der
 zweiten Position der Schlüssel eingesetzt. So kann überprüft 
 werden, ob eine Raum einen Schlüssel enthält.\\
 \\
 
 \noindent
-Eine weitere wichtige Modelierung, welche zwingend notwendig
+Eine weitere wichtige Modellierung, welche zwingend notwendig
 war, ist die Verschachtelung der Räume. Wir müssen wissen,
 in welchem Raum sich welcher Unterraum befindet, damit wir an 
 weitere Schlüssel kommen können. Deswegen haben wir die 
 Funktion \textbf{roomcontainsroom} erstellt, welche als erstes
-Argument den übergeordneten Raum nimmt und an der zweiten Stelle
-den Unterraum. Somit kann geprüft werden, ob ein Raum in einem 
+Argument den übergeordneten Raum und an der zweiten Stelle
+den Unterraum entgegennimmt. Somit kann geprüft werden, ob ein Raum in einem 
 anderen Raum vorhanden ist. Dies ist vorallem dann wichtig, wenn
 wir wissen wollen wo sich ein bestimmter Raum befindet.\\
 \\
@@ -30,14 +30,14 @@ wir wissen wollen wo sich ein bestimmter Raum befindet.\\
 Zu guter Letzt haben wir noch den Raum festgelegt, in welchem sich 
 der Schatz befindet, welchen man schlussendlich finden muss. Diese
 Funktion wird auch nur verwendet um zu vergleichen, ob das Ziel 
-erreicht wurde.
+erreicht wurde. Diese Funktion haben wir \textbf{}
 
 \section{Verwendetet Funktionen}
 In diesem Kapitel beschreiben wir alle von uns verwendeten Funktionen.
 Dazu wird auch immer eine kleiner Codeausschnitt zu sehen sein.
 
 \subsection{Union}
-Bei der Union-Funktion wird wie der Name schon sagt eine Vereinigung
+Bei der Union-Funktion wird, wie der Name schon sagt, eine Vereinigung
 aus zwei Listen gemacht. Diese verwenden wir anschliessend in der 
 \textbf{cangetchestfrom} Methode.
 
@@ -48,8 +48,8 @@ aus zwei Listen gemacht. Diese verwenden wir anschliessend in der
 \end{verbatim}
 
 \subsection{Member}
-Mit dieser Funktion überprüfen wir ob ein Element bereits in 
-unsere Liste vorhanden ist. Wenn es vorhanden ist, wird \textbf{True}
+Mit dieser Funktion überprüfen wir, ob ein Element bereits in 
+unsere Liste hinzugefügt wurde. Wenn es vorhanden ist, wird \textbf{True}
 zurück gegeben.
 
 \begin{verbatim}
@@ -60,8 +60,9 @@ zurück gegeben.
 \newpage
 
 \subsection{ListAppend}
-Um unsere Resultate zu speichern, haben wir uns eine Funktion
-zusammengebaut, welche Elemente einer Liste hinzufügt.
+Um unsere Resultate zu speichern und schlussendlich eine Route zu erhalten, 
+haben wir uns eine Funktion zusammengebaut, welche Elemente einer vorhandenen 
+Liste hinzufügt.
 
 \begin{verbatim}
     list_append(A,T,T) :- member(A,T),!.
@@ -88,8 +89,8 @@ Bei unsere Lösung haben wir eine Liste verwendet, welche bei 0 und nicht bei 1
 startet. Deswegen verwenden wir \textbf{nth0}.
 
 \subsection{cangetkeyfrom}
-Mit dieser Funktion wollen wir herausfinden ob eine Schlüssel K von einem 
-Raum F erreichbar ist. Wenn der Schlüssel erreicht werden kann, wird eine Liste B
+Mit dieser Funktion wollen wir herausfinden, ob eine Schlüssel \textbf{K} von einem 
+Raum \textbf{F} aus erreichbar ist. Wenn der Schlüssel erreicht werden kann, wird eine Liste \textbf{B}
 mit allen notwendigen Schlüsseln zurückgegeben.
 
 \begin{verbatim}
@@ -100,9 +101,9 @@ mit allen notwendigen Schlüsseln zurückgegeben.
 \end{verbatim}
 
 \subsection{canreachroomfrom}
-Wie der Name bereits sagt, wollen wir herausfinden ob ein Raum \textbf{R} von einem
+Wie der Name bereits sagt, wollen wir herausfinden, ob ein Raum \textbf{R} von einem
 anderen Raum \textbf{F} aus erreicht werden kann. Wenn dies möglich ist, wird die Funktionen
-eine Liste L mit Schlüsseln zurückgeben. Ansonsten wird False als Resultat returniert.
+eine Liste \textbf{L} mit Schlüsseln zurückgeben. Ansonsten wird \textbf{False} als Resultat returniert.
 
 \begin{verbatim}
     canreachroomfrom(R,F,L):- cangetkeyfrom(R,F,[],A), 
@@ -112,7 +113,7 @@ eine Liste L mit Schlüsseln zurückgeben. Ansonsten wird False als Resultat ret
 
 \subsection{cangetchestfrom}
 Diese Funktion ist zuständig herauszufinden, ob wir den Schatz von einem bestimmten
-Raum \textbf{F} aus bekommen können. Wenn Prolog eine Lösung gefunden hat, wird eine
+Raum \textbf{F} aus finden können. Wenn Prolog eine Lösung gefunden hat, wird eine
 Liste \textbf{L} mit benötigten Schlüsseln zurückgegeben. Diese Liste ist im Endeffekt
 nichts anderes als eine Schritt für Schritt Anleitung, wie der Schatz erreicht werden 
 kann. Am Ende der Liste wird zusätzlich noch eine \textbf{S} angefügt. Dies symbolisiert 
@@ -143,8 +144,8 @@ Diese Funktion wird verwendet um den Schlüssel aus dem vorher erstellten Tupel 
 \end{verbatim}
 
 \subsection{sortbykey}
-Zu guter Letzt wollen wir noch die Liste der Tupels sortieren, welche in den vorherigen Funktionen
-erstellt wurden. Dazu verwenden wir maplist und unseren Bubblesort Algorithmus.
+Zu guter Letzt, wollen wir noch die Liste der Tupels sortieren, welche in den vorherigen Funktionen
+erstellt wurden. Dazu verwenden wir \textbf{maplist} und unseren Bubblesort Algorithmus.
 
 \begin{verbatim}
     sortbykey(F,L,O):- maplist(lengthkey, L, A), 
