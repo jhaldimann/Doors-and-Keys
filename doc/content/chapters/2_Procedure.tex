@@ -7,10 +7,9 @@ Aufgaben vorgegenagen sind.
 Bei der Modellierung der Ausgangslage, haben wir genau
 die Situation, wie sie auf dem Aufgabenblatt steht,
 in Prolog umgesetzt. Dabei haben wir für die 
-Schlüssel und Tür Beziehung das Keyword
-\textbf{roomkey()} verwendet. In der 
-ersten Position in der Klammer wird der Raum und an der
-zweiten Position der Schlüssel eingesetzt. So kann überprüft 
+Schlüssel und Tür Beziehung den Fact
+\textbf{roomkey(X,Y)} verwendet. Wobei \textbf{X} der Raum ist in welchem sich
+der Schlüssel \textbf{Y} befindet. So kann überprüft 
 werden, ob eine Raum einen Schlüssel enthält.\\
 \\
 
@@ -18,28 +17,27 @@ werden, ob eine Raum einen Schlüssel enthält.\\
 Eine weitere wichtige Modellierung, welche zwingend notwendig
 war, ist die Verschachtelung der Räume. Wir müssen wissen,
 in welchem Raum sich welcher Unterraum befindet, damit wir an 
-weitere Schlüssel kommen können. Deswegen haben wir die 
-Funktion \textbf{roomcontainsroom} erstellt, welche als erstes
-Argument den übergeordneten Raum und an der zweiten Stelle
-den Unterraum entgegennimmt. Somit kann geprüft werden, ob ein Raum in einem 
+weitere Schlüssel kommen können. Deswegen haben wir den
+Fact \textbf{roomcontainsroom(X,Y)} erstellt. Bei diesem ist \textbf{X} der äussere und \textbf{Y}
+der innere Raum. Somit kann geprüft werden, ob ein Raum in einem 
 anderen Raum vorhanden ist. Dies ist vorallem dann wichtig, wenn
 wir wissen wollen wo sich ein bestimmter Raum befindet.\\
 \\
 
 \noindent
 Zu guter Letzt haben wir noch den Raum festgelegt, in welchem sich 
-der Schatz befindet, welchen man schlussendlich finden muss. Diese
-Funktion wird auch nur verwendet um zu vergleichen, ob das Ziel 
-erreicht wurde. Diese Funktion haben wir \textbf{}
+der Schatz befindet, welchen man schlussendlich finden muss. Für dies
+haben wir den Fact \textbf{roomcontainschest(X)}, wobei X der Raum ist
+wo sich der Schatz befindet.
 
-\section{Verwendetet Funktionen}
-In diesem Kapitel beschreiben wir alle von uns verwendeten Funktionen.
+\section{Verwendete Rules}
+In diesem Kapitel beschreiben wir alle von uns verwendeten Rules.
 Dazu wird auch immer eine kleiner Codeausschnitt zu sehen sein.
 
 \subsection{Union}
-Bei der Union-Funktion wird, wie der Name schon sagt, eine Vereinigung
+Bei der Union-Rule wird, wie der Name schon sagt, eine Vereinigung
 aus zwei Listen gemacht. Diese verwenden wir anschliessend in der 
-\textbf{cangetchestfrom} Methode.
+\textbf{cangetchestfrom} Rule.
 
 \begin{verbatim}
     union([X|Y],Z,W) :- member(X,Z),  union(Y,Z,W).
@@ -48,9 +46,8 @@ aus zwei Listen gemacht. Diese verwenden wir anschliessend in der
 \end{verbatim}
 
 \subsection{Member}
-Mit dieser Funktion überprüfen wir, ob ein Element bereits in 
-unsere Liste hinzugefügt wurde. Wenn es vorhanden ist, wird \textbf{True}
-zurück gegeben.
+Mit dieser Rule überprüfen wir, ob sich ein Element bereits in 
+unserer Liste befindet.
 
 \begin{verbatim}
     member(X,[X|_]).
@@ -60,9 +57,8 @@ zurück gegeben.
 \newpage
 
 \subsection{ListAppend}
-Um unsere Resultate zu speichern und schlussendlich eine Route zu erhalten, 
-haben wir uns eine Funktion zusammengebaut, welche Elemente einer vorhandenen 
-Liste hinzufügt.
+Um bei einer Liste ein Element hinzuzufügen haben wir die \textbf{list_append()} Rule geschrieben. Damit können wir alle Schlüssel, welche nötig sind um zum
+Schatz zu kommen, in einer Liste anzeigen.
 
 \begin{verbatim}
     list_append(A,T,T) :- member(A,T),!.
@@ -70,8 +66,9 @@ Liste hinzufügt.
 \end{verbatim}
 
 \subsection{BubbleSort}
-Da wir unsere Liste noch nach Anzahl benötigter Schlüsser sortieren
-müssen, haben wir uns für den einfachsten Sortieralgorithmus 
+Um die Schlüssel in der Reihenfolge, in welcher sie geholt werden müssen, anzeigen zu können sortieren wir
+die Liste der Schlüssel nach der Anzahl Schlüssel, welche benötigt werden um ihn zu erreichen.
+Wir uns für den einfachsten Sortieralgorithmus 
 entschieden. Den Bubblesort haben wie folgt umgesetzt:
 
 \begin{verbatim}
@@ -84,14 +81,11 @@ entschieden. Den Bubblesort haben wie folgt umgesetzt:
     bubble(X,[Y|T],[X|NT],Max):-nth0(0,X,A), nth0(0,Y,B), A=<B,bubble(Y,T,NT,Max).
 \end{verbatim}
 
-\noindent
-Bei unsere Lösung haben wir eine Liste verwendet, welche bei 0 und nicht bei 1
-startet. Deswegen verwenden wir \textbf{nth0}.
-
-\subsection{cangetkeyfrom}
-Mit dieser Funktion wollen wir herausfinden, ob eine Schlüssel \textbf{K} von einem 
+\subsection{CanGetKeyFrom}
+Mit dieser Rule wollen wir feststellen, ob eine Schlüssel \textbf{K} von einem 
 Raum \textbf{F} aus erreichbar ist. Wenn der Schlüssel erreicht werden kann, wird eine Liste \textbf{B}
-mit allen notwendigen Schlüsseln zurückgegeben.
+mit allen notwendigen Schlüsseln zurückgegeben. \textbf{L} ist am Anfang eine leere Liste, welche mit 
+\textbf{list_append()} befüllt wird.
 
 \begin{verbatim}
     cangetkeyfrom(K,F,L,B):- (roomkey(F, K), list_append(K, L, B) ; 
@@ -100,10 +94,10 @@ mit allen notwendigen Schlüsseln zurückgegeben.
         (roomcontainsroom(Y,X), cangetkeyfrom(Y,F,C,B))))).
 \end{verbatim}
 
-\subsection{canreachroomfrom}
+\subsection{CanReachRoomFrom}
 Wie der Name bereits sagt, wollen wir herausfinden, ob ein Raum \textbf{R} von einem
 anderen Raum \textbf{F} aus erreicht werden kann. Wenn dies möglich ist, wird die Funktionen
-eine Liste \textbf{L} mit Schlüsseln zurückgeben. Ansonsten wird \textbf{False} als Resultat returniert.
+eine Liste \textbf{L} mit Schlüsseln zurückgeben. Ansonsten wird \textbf{false} als Resultat returniert.
 
 \begin{verbatim}
     canreachroomfrom(R,F,L):- cangetkeyfrom(R,F,[],A), 
@@ -111,13 +105,13 @@ eine Liste \textbf{L} mit Schlüsseln zurückgeben. Ansonsten wird \textbf{False
         (roomcontainsroom(Y,R), cangetkeyfrom(Y,F,[],L))).
 \end{verbatim}
 
-\subsection{cangetchestfrom}
-Diese Funktion ist zuständig herauszufinden, ob wir den Schatz von einem bestimmten
+\subsection{CanGetChestFrom}
+Mit dieser Rule stellen wir fest, ob wir den Schatz von einem bestimmten
 Raum \textbf{F} aus finden können. Wenn Prolog eine Lösung gefunden hat, wird eine
 Liste \textbf{L} mit benötigten Schlüsseln zurückgegeben. Diese Liste ist im Endeffekt
 nichts anderes als eine Schritt für Schritt Anleitung, wie der Schatz erreicht werden 
-kann. Am Ende der Liste wird zusätzlich noch eine \textbf{S} angefügt. Dies symbolisiert 
-den zu findenden Schatz.
+kann. Am Ende der Liste wird zusätzlich noch ein \textbf{S} angefügt, welches den Schatz 
+symbolisiert.
 
 \begin{verbatim}
     cangetchestfrom(F,L):- roomcontainschest(X), cangetkeyfrom(X,F,[],A),
@@ -126,25 +120,25 @@ den zu findenden Schatz.
 
 \newpage
 
-\subsection{lengthkey}
+\subsection{LengthKey}
 Um unsere Reihenfolge der Schritte richtig zu bestimmen, haben wir eine Funktion geschrieben,
-welche ein Tupel aus dem Schlüssel \textbf{K} und der Anzahl Schlüssel um den Raum \textbf{N}
-zu erreichen erstellt. So wissen wir genau wo in unserer Liste der entsprechende Schlüssel
+welche ein Tupel aus dem Schlüssel \textbf{K} und der Anzahl Schlüssel \textbf{N}, um den Schlüssel
+zu erreichen, erstellt. So wissen wir genau wo in unserer Liste der entsprechende Schlüssel
 abgelegt werden muss.
 
 \begin{verbatim}
     lengthkey(K,O):- cangetkeyfrom(K,0,[],B), length(B,N), O=[N,K].
 \end{verbatim}
 
-\subsection{getkeyonly}
-Diese Funktion wird verwendet um den Schlüssel aus dem vorher erstellten Tupel herauszuholen.
+\subsection{GetKeyOnly}
+Diese Rule wird verwendet um den Schlüssel aus dem vorher erstellten Tupel herauszuholen.
 
 \begin{verbatim}
     getkeyonly(LK,K):- nth0(1,LK,K).
 \end{verbatim}
 
-\subsection{sortbykey}
-Zu guter Letzt, wollen wir noch die Liste der Tupels sortieren, welche in den vorherigen Funktionen
+\subsection{SortByKey}
+Zu guter Letzt, wollen wir noch die Liste der Tupels sortieren, welche in den vorherigen Rule
 erstellt wurden. Dazu verwenden wir \textbf{maplist} und unseren Bubblesort Algorithmus.
 
 \begin{verbatim}
