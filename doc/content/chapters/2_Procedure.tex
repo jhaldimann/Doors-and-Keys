@@ -57,7 +57,8 @@ unserer Liste befindet.
 \newpage
 
 \subsection{ListAppend}
-Um bei einer Liste ein Element hinzuzufügen haben wir die \textbf{list_append()} Rule geschrieben. Damit können wir alle Schlüssel, welche nötig sind um zum
+Um bei einer Liste ein Element hinzuzufügen haben wir die \textbf{list\_append()} Rule geschrieben. 
+Damit können wir alle Schlüssel, welche nötig sind um zum
 Schatz zu kommen, in einer Liste anzeigen.
 
 \begin{verbatim}
@@ -85,7 +86,7 @@ entschieden. Den Bubblesort haben wie folgt umgesetzt:
 Mit dieser Rule wollen wir feststellen, ob eine Schlüssel \textbf{K} von einem 
 Raum \textbf{F} aus erreichbar ist. Wenn der Schlüssel erreicht werden kann, wird eine Liste \textbf{B}
 mit allen notwendigen Schlüsseln zurückgegeben. \textbf{L} ist am Anfang eine leere Liste, welche mit 
-\textbf{list_append()} befüllt wird.
+\textbf{list\_append()} befüllt wird.
 
 \begin{verbatim}
     cangetkeyfrom(K,F,L,B):- (roomkey(F, K), list_append(K, L, B) ; 
